@@ -44,7 +44,7 @@ store.dispatch(
 )
 ```
 > for every dispatch store function is running
- ![redux](DOC/redux_02.jpg)
+ ![redux](./DOC/redux_02.JPG)
 ## Pass the seconed argument `action`
 
 ```js
