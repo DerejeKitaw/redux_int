@@ -63,7 +63,7 @@ store.dispatch(
   }
 )
 ```
- ![redux](./DOC/redux_03.jpg)
+ ![redux](./DOC/redux_03.JPG)
 
 ## increment counter if action type is 'INCREMENT'
 ```js
@@ -85,7 +85,7 @@ store.dispatch({
 
 console.log(store.getState());
 ```
- ![redux](./DOC/redux_04.jpg)
+ ![redux](./DOC/redux_04.JPG)
 
 ## Add one more dispatch to increment the counter
 ```js
@@ -111,4 +111,4 @@ store.dispatch({
 
 console.log(store.getState());
 ```
- ![redux](./DOC/redux_05.jpg)
+ ![redux](./DOC/redux_05.JPG)
