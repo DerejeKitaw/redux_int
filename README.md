@@ -513,3 +513,154 @@ store.dispatch({
 console.log(store.getState());
 ```
  ![redux](./DOC/redux_12.png)
+
+## Refactoring and organizing using action generators
+> Action generators are functions that return action objects
+
+> Create action generator function to generate 'INCREMENT' actions
+```js
+const incrementCount = () => {
+  return {
+    type: 'INCREMENT'
+  };
+};
+```
+> Or with a shorthand syntax
+
+```js
+const incrementCount = () => ({
+  type: 'INCREMENT'
+});
+```
+> call action using the 
+```js
+store.dispatch(incrementCount());
+```
+## How do we use action generator with custom data
+```js
+store.dispatch(incrementCount({incrementBy:5}));
+```
+> action creator will be 
+```js
+const incrementCount = (payload = {}) => ({
+  type: 'INCREMENT',
+  incrementBy: typeof payload.incrementBy === "number" ? payload.incrementBy : 1
+});
+```
+> switch function do not need the const. It is handled in the action creator.
+```js
+case 'INCREMENT':
+      const incrementBy = typeof action.incrementBy === "number" ? action.incrementBy : 1;
+      return {
+        count: state.count + incrementBy
+      }
+```
+TO
+```js
+  case 'INCREMENT':
+      return {
+        count: state.count + action.incrementBy
+      };
+```
+## Destructure action creator
+```js
+const incrementCount = (payload = {}) => ({
+  type: 'INCREMENT',
+  incrementBy: typeof payload.incrementBy === "number" ? payload.incrementBy : 1
+});
+```
+```js
+const incrementCount = ({incrementBy} = {}) => ({
+  type: 'INCREMENT',
+  incrementBy: typeof incrementBy === "number" ? incrementBy : 1
+});
+```
+> set default value when destructuring
+```js
+const incrementCount = ({incrementBy = 1} = {}) => ({
+  type: 'INCREMENT',
+  incrementBy: typeof incrementBy === "number" ? incrementBy : 1
+});
+```
+
+```js
+typeof incrementBy === "number" ? incrementBy : 1
+// incrementBy is set to default value of 1 when destructuring. If it is not defined it will default to 1. So 
+`incrementBy` is equal to `typeof incrementBy === "number" ? incrementBy : 1`
+
+```
+SO
+```js
+const incrementCount = ({incrementBy = 1} = {}) => ({
+  type: 'INCREMENT',
+  incrementBy: incrementBy
+});
+```
+> In an object if the key and value s are same `incrementBy: incrementBy` es equal to `incrementBy`
+
+Finally
+```js
+const incrementCount = ({incrementBy = 1} = {}) => ({
+  type: 'INCREMENT',
+  incrementBy
+});
+```
+## Generate action generator for decrementCount
+```js
+import { storeCreator, createStore } from 'redux';
+
+const incrementCount = ({incrementBy = 1} = {}) => ({
+  type: 'INCREMENT',
+  incrementBy
+});
+const decrementCount = ({ decrementBy = 1 } = {}) =>({
+  type: 'DECREMENT',
+  decrementBy
+});
+const setCount = ({ startNumber = 0 } = {}) =>({
+  type: 'SET',
+  startNumber
+});
+const resetCount = ({ resetBy = 1 } = {}) =>({
+  type: 'RESET',
+  resetBy
+});
+
+
+const store = createStore((state = { count: 0 }, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      
+      return {
+        count: state.count + action.incrementBy
+      };
+    case 'DECREMENT':
+      return {
+        count: state.count - action.decrementBy
+      };
+    case 'RESET':
+      return {
+        count: 0
+      };
+    case 'SET':
+      
+      return {
+        count: action.startNumber
+      };
+    default:
+      return state;
+  }
+});
+const unsubscribe = store.subscribe(() => {
+  console.log(store.getState());
+});
+store.dispatch(incrementCount({incrementBy:5}));
+store.dispatch(incrementCount());
+store.dispatch(decrementCount({decrementBy:5}));
+store.dispatch(resetCount());
+store.dispatch(decrementCount());
+store.dispatch(decrementCount());
+store.dispatch(setCount({startNumber: 100}));
+
+```
+ ![redux](./DOC/redux_13.png)
