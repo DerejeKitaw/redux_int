@@ -664,3 +664,4 @@ store.dispatch(setCount({startNumber: 100}));
 
 ```
  ![redux](./DOC/redux_13.png)
+# Extract reducer from the createStore function
